@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Student Management System</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        input {
+            padding: 10px;
+            margin: 5px;
+            width: 200px;
+        }
+
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin-top: 30px;
+        }
+
+        th,
+        td {
+            border: 1px solid #999;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #eee;
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+    <h1>Student Management System</h1>
+
+    <h2>Add Student</h2>
+
+    <input type="text" id="name" placeholder="Student Name">
+
+    <input type="text" id="rollNo" placeholder="Roll Number">
+
+    <input type="text" id="course" placeholder="Course">
+
+    <button onclick="addStudent()">
+        Add Student
+    </button>
+
+
+    <h2>Student List</h2>
+
+    <button onclick="getStudents()">
+        Refresh Students
+    </button>
+
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>Name</th>
+
+                <th>Roll Number</th>
+
+                <th>Course</th>
+
+                <th>Action</th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody id="studentTable">
+
+        </tbody>
+
+    </table>
+
+
+    <script>
+
+        // ====================================
+        // CREATE
+        // ====================================
+
+        async function addStudent() {
+
+            const name =
+                document.getElementById("name").value;
+
+            const rollNo =
+                document.getElementById("rollNo").value;
+
+            const course =
+                document.getElementById("course").value;
+
+
+            const student = {
+
+                name: name,
+
+                rollNo: rollNo,
+
+                course: course
+
+            };
+
+
+            const response = await fetch("/students", {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type": "application/json"
+
+                },
+
+                body: JSON.stringify(student)
+
+            });
+
+
+            const result = await response.json();
+
+
+            alert(result.message);
+
+
+            document.getElementById("name").value = "";
+
+            document.getElementById("rollNo").value = "";
+
+            document.getElementById("course").value = "";
+
+
+            getStudents();
+
+        }
+
+
+        // ====================================
+        // READ
+        // ====================================
+
+        async function getStudents() {
+
+            const response =
+                await fetch("/students");
+
+
+            const students =
+                await response.json();
+
+
+            const table =
+                document.getElementById("studentTable");
+
+
+            table.innerHTML = "";
+
+
+            students.forEach(student => {
+
+                const row = `
+
+                    <tr>
+
+                        <td>
+                            ${student.name}
+                        </td>
+
+                        <td>
+                            ${student.rollNo}
+                        </td>
+
+                        <td>
+                            ${student.course}
+                        </td>
+
+                        <td>
+
+                            <button
+                                onclick="deleteStudent('${student._id}')"
+                            >
+                                Delete
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+
+                table.innerHTML += row;
+
+            });
+
+        }
+
+
+        // ====================================
+        // DELETE
+        // ====================================
+
+        async function deleteStudent(id) {
+
+            const response =
+                await fetch(`/students/${id}`, {
+
+                    method: "DELETE"
+
+                });
+
+
+            const result =
+                await response.json();
+
+
+            alert(result.message);
+
+
+            getStudents();
+
+        }
+
+    </script>
+
+</body>
+
+</html>

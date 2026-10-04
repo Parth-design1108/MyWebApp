@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        JavaScript Form Validation
+    </title>
+</head>
+<body>
+    <h1>
+        Student Registration Form
+    </h1>
+    <form onsubmit="return validateForm()">
+        <label>
+            Name:
+        </label>
+        <input type="text" id="name">
+        <br><br>
+        <label>
+            Email:
+        </label>
+        <input type="text" id="email">
+        <br><br>
+        <label>
+            Mobile Number:
+        </label>
+        <input type="text" id="mobile">
+        <br><br>
+        <button type="submit">
+            Submit
+        </button>
+    </form>
+    <p id="message"></p>
+    <script src="script.js"></script>
+</body>
+</html>
